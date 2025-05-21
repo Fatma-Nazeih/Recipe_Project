@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'stylem.css' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Recipes</title>
+    <link rel="stylesheet" href="{% static 'stylem.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body class = "favorite-recipe">
+    <div class="navigation">
+        <h2 class="menu-title">Recipe Finder</h2>
+        <ul class="menu-list">
+            <a href="/profile/" class="menu-link">Profile</a>
+            <a href="/search/" class="menu-link">Search</a>
+            <a href="/favorites/" class="menu-link">Favourites</a>
+            <a href="/dashboard/" class="menu-link">Dashboard</a>
+            <a href="/admin-dashboard/" class="menu-link">Admin Dashboard</a>
+            <a href="{% url 'recipe_finder:logout' %}" class="menu-link" id="logout-link">Logout</a>
+        </ul>
+    </div>
+    <header> 
+        <h1>My Favorite Recipes</h1>
+    </header>
+    
+    <main class="favorites-main">
+        <div class="favorites-container" id="favorites-container">
+            <!-- Cards will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script src="{% static 'removeFromFavorite.js' %}"></script>
+
+</body>
+
+{% endblock %}

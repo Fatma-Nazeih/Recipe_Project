@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Recipe Finder</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Log in to your Recipe Finder account</p>
+        </div>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form id="login-form">
+            {% csrf_token %}
+            <div class="form-group" id="identifier-group"> 
+                <label for="identifier">Email or Username</label>
+                <input type="text" id="identifier" name="identifier" required>
+                <div class="input-feedback" id="identifier-feedback">
+                    <span class="valid-icon">✔</span>
+                    <span class="invalid-icon">✘</span>
+                    <span class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-group" id="password-group"> 
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="input-feedback" id="password-feedback">
+                    <span class="valid-icon">✔</span>
+                    <span class="invalid-icon">✘</span>
+                    <span class="error-message"></span>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me-container">
+                    <input type="checkbox" id="remember-me" name="remember_me">
+                    Remember me
+                </label>
+                <a href="{% url 'recipe_finder:forgot_password' %}" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn-login" id="login-btn">Log In</button>
+
+            <div class="login-footer">
+                Don't have an account? <a href="{% url 'recipe_finder:signup_step1' %}">Sign up</a>
+            </div>
+        </form>
+    </div>
+    <script src="{% static 'auth.js' %}"></script>
+    <script src="{% static 'login.js' %}"></script>
+</body>
+</html>

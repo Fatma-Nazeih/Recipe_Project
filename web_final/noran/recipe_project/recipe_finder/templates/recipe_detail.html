@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'favorites.css' %}">
+    <!-- Recipe Content -->
+    <div class="recipe-content">
+        <!-- Recipe Header -->
+        <div class="recipe-header">
+            <h1>{{ recipe.title }}</h1>
+            <div class="recipe-image">
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+            </div>
+            <div class="recipe-meta">
+                <span class="category">{{ recipe.category }}</span>
+                <span class="prep-time">⏱ {{ recipe.prep_time }}</span>
+            </div>
+            
+        </div>
+        
+        <!-- Description -->
+        <div class="recipe-description">
+            <p>{{ recipe.description }}</p>
+        </div>
+        
+        <!-- Ingredients -->
+        <div class="recipe-section">
+            <h2>Ingredients</h2>
+            <ul class="ingredients-list">
+                {% for ingredient in ingredients_list %}
+                    {% if ingredient.strip %}
+                        <li>{{ ingredient.strip }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="recipe-section">
+            <h2>Instructions</h2>
+            <ol class="instructions-list">
+                {% for instruction in instructions_list %}
+                    {% if instruction.strip %}
+                        <li>{{ instruction.strip }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="favorite-container">
+            <button class="favorite-button" 
+                    data-recipe-id="{{ recipe.id }}"
+                    data-recipe-title="{{ recipe.title }}"
+                    data-recipe-description="{{ recipe.description }}"
+                    data-recipe-image="{{ recipe.image.url }}"
+                    data-recipe-link="{% url 'recipe_detail' recipe.id %}">
+                ⭐ Add to Favorites
+            </button>
+        </div>
+        <!-- Author Info -->
+        <div class="recipe-footer">
+            <p>Recipe by: {{ recipe.author.username|default:"Admin" }}</p>
+        </div>
+    
+    </div>
+    <script src="{% static 'addToFavorite.js' %}"></script>
+
+{% endblock content %}

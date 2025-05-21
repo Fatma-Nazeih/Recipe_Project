@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Recipe Finder</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'profile_css.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/9a6d1e1b85.js" crossorigin="anonymous"></script>
+    
+</head>
+<body>
+    <nav class="navigation">
+        <a href="{% url 'recipe_finder:welcome' %}" class="menu-title">Recipe Finder</a> 
+
+        <ul class="menu-list"> 
+            <a href="/profile/" class="menu-link">Profile</a>
+            <a href="/search/" class="menu-link">Search</a>
+            <a href="/favorites/" class="menu-link">Favourites</a>
+            <a href="/dashboard/" class="menu-link">Dashboard</a>
+            <a href="/admin-dashboard/" class="menu-link">Admin Dashboard</a>
+            <a href="{% url 'recipe_finder:logout' %}" class="menu-link" id="logout-link">Logout</a>
+            
+        </ul>
+    </nav>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="profile-container">
+        <div class="profile-sidebar">
+            <div class="profile-picture">
+                <img id="profile-avatar" src="{{ profile.avatar }}" alt="Profile Picture">
+                <a href="#edit-modal" class="edit-btn"><i class="fas fa-pencil-alt"></i></a>
+            </div>
+            <h3 id="profile-name">{{ user.username }}</h3>
+            <div class="username" id="profile-username">@{{ user.username }}</div>
+            <div class="verification-badge">
+                <i class="fas fa-check-circle"></i> Verified Account
+            </div>
+            <div class="profile-menu">
+                <a href="#my-profile" class="active"><i class="fas fa-user"></i> My Profile</a>
+                <a href="#edit-profile"><i class="fas fa-edit"></i> Edit Profile</a>
+                <a href="#security"><i class="fas fa-shield-alt"></i> Security</a>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-section active-section" id="my-profile"> 
+                <div class="section-header">
+                    <h3>My Profile</h3>
+                    <a href="#edit-profile" class="edit-link"><i class="fas fa-edit"></i> Edit</a>
+                </div>
+                <div class="about-me" id="profile-bio">{{ profile.bio|default:"Not provided" }}</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label"><i class="fas fa-envelope"></i> Email</div>
+                        <div class="info-value" id="profile-email">{{ user.email }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="fas fa-calendar-alt"></i> Joined</div>
+                        <div class="info-value" id="profile-joined">{{ profile.join_date|date:"M d, Y"|default:"N/A" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="fas fa-map-marker-alt"></i> Location</div>
+                        <div class="info-value" id="profile-location">{{ profile.location|default:"Not provided" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="fas fa-utensils"></i> Favorite Cuisines</div>
+                        <div class="info-value" id="profile-cuisines">{{ profile.cuisine_specialty|default:"None selected" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="fas fa-clock"></i> Last Login</div>
+                        <div class="info-value" id="profile-last-login">{{ profile.last_login|date:"M d, Y H:i"|default:"Never" }}</div>
+                    </div>
+                </div>
+                <div class="section-header">
+                    <h3>My Interests</h3>
+                </div>
+                <div class="interests-container" id="profile-interests" data-interests="{{ profile.interests|default:'' }}">
+                    {% if interests_list %} 
+                        {% for interest in interests_list %} 
+                            <span class="interest-tag"><i class="fas fa-heart"></i> {{ interest }}</span>
+                        {% endfor %}
+                    {% else %}
+                         <p>No interests added yet.</p> 
+                    {% endif %}
+                </div>
+                <div class="section-header">
+                    <h3>Recent Activity</h3>
+                </div>
+                <div class="activity-feed">
+                    <div class="activity-item">
+                        <div class="activity-avatar">
+                            <img id="activity-avatar" src="{{ profile.avatar }}" alt="Avatar">
+                        </div>
+                        <div class="activity-content">
+                            <p>You joined Recipe Finder</p>
+                            <div class="activity-time" id="activity-time">{{ profile.join_date|date:"M d, Y H:i"|default:"N/A" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section" id="edit-profile">
+                <div class="section-header">
+                    <h3>Edit Profile</h3>
+                </div>
+                <div class="edit-form-container">
+                    <form id="edit-profile-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="full-name">Username</label>
+                            <input type="text" id="full-name" name="full-name" value="{{ user.username|default:'' }}"> 
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-bio">About Me</label>
+                            <textarea id="edit-bio" name="bio" placeholder="Tell others about yourself, your cooking experience, and what you love about food">{{ profile.bio|default:'' }}</textarea> 
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-location">Location</label>
+                            <input type="text" id="edit-location" name="location" value="{{ profile.location|default:'' }}"> 
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-cuisines">Favorite Cuisines</label>
+                            <select id="edit-cuisines" name="cuisines" multiple>
+                                {% for cuisine_option in cuisines_options %} 
+                                    <option value="{{ cuisine_option }}" {% if cuisine_option in cuisine_specialty_list %}selected{% endif %}>{{ cuisine_option }}</option> 
+                                {% endfor %}
+                            </select>
+                            <div class="form-hint">Hold Ctrl/Cmd to select multiple</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-interests">Interests (comma separated)</label>
+                            <input type="text" id="edit-interests" name="interests" value="{{ profile.interests|default:'' }}"> 
+                        </div>
+                        <div class="form-actions">
+                            <a href="#my-profile" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="profile-section" id="security">
+                <div class="section-header">
+                    <h3>Security Settings</h3>
+                </div>
+                <div class="edit-form-container">
+                    <form id="change-password-form">
+                        {% csrf_token %}
+                        <div class="section-header">
+                            <h3>Change Password</h3>
+                        </div>
+                        <div class="form-group">
+                            <label for="current-password">Current Password</label>
+                            <input type="password" id="current-password" name="current-password" required>
+                            <div class="input-feedback" id="current-password-feedback">
+                                <span class="valid-icon">✔</span>
+                                <span class="invalid-icon">✘</span>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password-security">New Password</label>
+                            <input type="password" id="new-password-security" name="new-password" required>
+                            <div class="password-strength">
+                                <div class="strength-meter">
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                </div>
+                                <span class="strength-text">Password Strength: Weak</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password-security">Confirm New Password</label>
+                            <input type="password" id="confirm-password-security" name="confirm-password" required>
+                            <div class="input-feedback" id="confirm-password-security-feedback">
+                                <span class="valid-icon">✔</span>
+                                <span class="invalid-icon">✘</span>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </div>
+                    </form>
+
+                    <form id="delete-account-form" style="margin-top: 40px;">
+                        {% csrf_token %}
+                        <div class="section-header">
+                            <h3>Danger Zone</h3>
+                        </div>
+                        <p>Deleting your account will remove all your data permanently.</p>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-danger">Delete Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit-modal" id="edit-modal"> 
+        <div class="modal-content">
+            <h3>Change Profile Picture</h3>
+            <form id="avatar-form">
+                {% csrf_token %}
+                <div class="image-options">
+                    <label class="avatar-option">
+                        <input type="radio" name="avatar" value="https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg" {% if profile.avatar == 'https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg' %}checked{% endif %}>
+                        <img src="https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg" alt="Avatar 1">
+                        <span class="checkmark"><i class="fas fa-check"></i></span>
+                    </label>
+                    <label class="avatar-option">
+                        <input type="radio" name="avatar" value="https://i.pinimg.com/736x/68/4c/b6/684cb636cf67568ed031a5fee627c8a5.jpg" {% if profile.avatar == 'https://i.pinimg.com/736x/68/4c/b6/684cb636cf67568ed031a5fee627c8a5.jpg' %}checked{% endif %}>
+                        <img src="https://i.pinimg.com/736x/68/4c/b6/684cb636cf67568ed031a5fee627c8a5.jpg" alt="Avatar 2">
+                        <span class="checkmark"><i class="fas fa-check"></i></span>
+                    </label>
+                    <label class="avatar-option">
+                        <input type="radio" name="avatar" value="https://i.pinimg.com/736x/1d/36/03/1d36037951e66042f1b379a84b07a6c3.jpg" {% if profile.avatar == 'https://i.pinimg.com/736x/1d/36/03/1d36037951e66042f1b379a84b07a6c3.jpg' %}checked{% endif %}>
+                        <img src="https://i.pinimg.com/736x/1d/36/03/1d36037951e66042f1b379a84b07a6c3.jpg" alt="Avatar 3">
+                        <span class="checkmark"><i class="fas fa-check"></i></span>
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <a href="#" class="btn btn-secondary">Cancel</a> 
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script src="{% static 'profile.js' %}"></script>
+</body>
+</html>

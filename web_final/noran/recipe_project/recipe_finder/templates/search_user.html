@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'dash-search.css' %}">
+
+<div class="navigation">
+    <h2 class="menu-title">Recipe Finder</h2>
+    <ul class="menu-list">
+        <a href="/profile/" class="menu-link">Profile</a>
+            <a href="/search/" class="menu-link">Search</a>
+            <a href="/favorites/" class="menu-link">Favourites</a>
+            <a href="/dashboard/" class="menu-link">Dashboard</a>
+            <a href="/admin-dashboard/" class="menu-link">Admin Dashboard</a>
+            <a href="{% url 'recipe_finder:logout' %}" class="menu-link" id="logout-link">Logout</a>
+    </ul>
+</div>
+    <section class="search-container">
+        <div class="search">
+            <i class="fa fa-search"></i>
+            <form method="GET" action="{% url 'recipe_finder:search2' %}">
+                <input style="background-color: transparent;
+                font-size: 20px;
+                margin-left: 20px;
+                padding: 5px;
+                border-radius: 20px;
+                width: 50%;
+                border: none;
+                outline: none;" type="text" name="q" placeholder="Search Recipes..." id="search-input"  value="{{ query }}">
+            </form>
+        </div>
+    </section>
+    <h2 class="head">Discover Amazing Recipes</h2>
+    
+    <h2 class="text" id="result-for">
+        {% if query %}Search Results for "{{ query }}"{% else %}All Recipes{% endif %}
+    </h2>
+    <h3 class="text" id="result-count">{{ result_count }} Recipes Found</h3>
+
+    <section class="recipes" id="recipes-container">
+        {% for recipe in recipes %}
+        <div class="recipe-card" data-recipe-id="{{ recipe.pk }}">
+            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
+            <div class="recipe-info">
+                <h3 class="recipe-title">{{ recipe.title }}</h3>
+                <p class="recipe-description">{{ recipe.description }}</p>
+                <p><b>Prep Time:</b> {{ recipe.prep_time }} min</p>
+                <p><b>Category:</b> {{ recipe.category }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h3>No recipes found</h3>
+            <p>Try different search terms</p>
+        </div>
+        {% endfor %}
+    </section>
+    <div>
+        <i class="fas fa-arrow-up" id="scroll"></i>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.recipe-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const recipeId = this.dataset.recipeId;
+                    window.location.href = `/recipe/${recipeId}/`;
+                });
+            });
+        });
+        </script>
+    <script src="{% static 'search.js' %}"></script>
+{% endblock %}

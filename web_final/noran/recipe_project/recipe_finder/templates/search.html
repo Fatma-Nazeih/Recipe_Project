@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search - Recipe Finder</title>
+</head>
+<body>
+    <div class="navigation">
+        <h2>Recipe Finder</h2>
+        <ul>
+            <li><a href="{% url 'search' %}">Search</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search Recipes..." id="search-input">
+    </div>
+
+    <div id="recipes-container">
+        <!-- Dynamic content will go here -->
+    </div>
+
+    <script src="{% static 'js/search.js' %}"></script>
+</body>
+</html>

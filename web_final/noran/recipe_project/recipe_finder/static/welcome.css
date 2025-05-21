@@ -1,0 +1,89 @@
+:root {
+    --main-color: #A75F37;
+    --secondary-color: #F8D9D1;
+    --light-color: #FBF3EC;
+    --text-color: #1E1B18;
+    --accent-color: #678D85;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to right, #FBF3EC, #E2BFAA);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-container {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    max-width: 500px;
+    width: 90%;
+}
+
+.app-title {
+    font-family: 'Comfortaa', cursive;
+    color: var(--main-color);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.tagline {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn {
+    text-decoration: none;
+    font-weight: 600;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-signup {
+    background-color: var(--main-color);
+    color: white;
+}
+
+.btn-signup:hover {
+    background-color: #8c4b2b;
+}
+
+.btn-login {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-login:hover {
+    background-color: #4a6c64;
+}
+
+@media (max-width: 480px) {
+    .app-title {
+        font-size: 2rem;
+    }
+
+    .btn {
+        font-size: 0.95rem;
+        padding: 12px 20px;
+    }
+}

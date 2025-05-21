@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Edit Recipe | Recipe App</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <!-- Authentication and Navigation Scripts -->
+    <script src="{% static 'javascript/auth.js' %}"></script>
+    <script src="{% static 'navigation.js' %}"></script>
+</head>
+<body>
+
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="logo">RecipeFinder</div>
+        <nav>
+            <ul>
+                <!-- Dashboard Link -->
+                <li><a href="adminDashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+
+                <!-- Manage Recipes Link (active) -->
+                <li><a href="edit-recipe.html" class="active"><i class="fas fa-utensils"></i> Manage Recipes</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-content">
+        <!-- Page Header -->
+        <header class="admin-header">
+            <h1>Edit Recipe</h1>
+        </header>
+
+        <!-- Edit Recipe Form -->
+        <form class="recipe-form">
+
+            <!-- Recipe Name Input -->
+            <div class="form-group">
+                <label for="recipe-name">Recipe Name</label>
+                <input type="text" id="recipe-name" />
+            </div>
+
+            <!-- Recipe Category Dropdown -->
+            <div class="form-group">
+                <label for="recipe-category">Category</label>
+                <select id="recipe-category">
+                    <option value="Appetizer">Appetizer</option>
+                    <option value="Main Course">Main Course</option>
+                    <option value="Dessert">Dessert</option>
+                </select>
+            </div>
+
+            <!-- Ingredients Section -->
+            <div class="form-group">
+                <label>Ingredients</label>
+                <div class="ingredients-list" id="ingredients-list">
+                    <!-- Ingredients will be loaded here dynamically -->
+                </div>
+
+                <!-- Add Ingredient Button -->
+                <button type="button" class="add-ingredient">
+                    <i class="fas fa-plus"></i> Add Ingredient
+                </button>
+            </div>
+
+            <!-- Recipe Description -->
+            <div class="form-group">
+                <label for="recipe-desc">Description</label>
+                <textarea id="recipe-desc"></textarea>
+            </div>
+
+            <!-- Preparation Time Input -->
+            <div class="form-group">
+                <label for="prep-time">Preparation Time (minutes)</label>
+                <input type="number" id="prep-time" min="1" />
+            </div>
+
+            <!-- Servings Input -->
+            <div class="form-group">
+                <label for="recipe-servings">Servings</label>
+                <input type="number" id="recipe-servings" name="servings" min="1"/>
+            </div>
+
+            <!-- Recipe Image Upload -->
+            <div class="form-group">
+                <label>Recipe Image</label>
+                <div class="image-upload">
+                    <input type="file" id="recipe-image" accept="image/*"/>
+                    <label for="recipe-image" class="upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Choose Image
+                    </label>
+                </div>
+
+                <!-- Image Preview -->
+                <img id="image-preview" src="#" alt="Image Preview" style="display: none; max-width: 100%; height: auto; margin-top: 10px;"/>
+            </div>
+
+            <!-- Form Action Buttons -->
+            <div class="form-actions">
+                <!-- Cancel Button -->
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='adminDashboard.html'">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+
+                <!-- Save Changes Button -->
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+
+        </form>
+    </main>
+</div>
+
+<!-- Main Script -->
+<script src="{% static 'script.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍲 Recipe Finder</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'welcome.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Comfortaa&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="welcome-container">
+        <h1 class="app-title">🍲 Recipe Finder</h1>
+        <p class="tagline">Discover, save, and share your favorite recipes</p>
+        <div class="actions">
+            <a href="{% url 'recipe_finder:signup_step1' %}" class="btn btn-signup">Sign Up</a>
+            <a href="{% url 'recipe_finder:login' %}"  class="btn btn-login">Log In</a>
+        </div>
+    </div>
+</body>
+</html>

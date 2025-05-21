@@ -1,0 +1,10 @@
+<!-- In your recipe list template -->
+{% for recipe in recipes %}
+    <div class="recipe-card">
+        <a href="{% url 'recipe_detail' recipe.id %}">
+            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+            <h3>{{ recipe.title }}</h3>
+        </a>
+        <p>{{ recipe.description|truncatewords:20 }}</p>
+    </div>
+{% endfor %}

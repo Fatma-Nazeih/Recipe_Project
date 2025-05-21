@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Recipe Finder</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Create Your Account</h2>
+        <div class="progress-steps">
+            <div class="step {% if step == 1 %}active{% endif %}">1. Account</div>
+            <div class="step {% if step == 2 %}active{% endif %}">2. Profile</div>
+            <div class="step {% if step == 3 %}active{% endif %}">3. Complete</div>
+        </div>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+
+        <div class="step-form">
+            <div class="form-step {% if step == 1 %}active{% endif %}">
+                <form id="account-form" method="post" action="{% url 'recipe_finder:signup_step1' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required value="{{ form_data.username|default:'' }}"> 
+                        <div class="input-feedback" id="username-feedback">
+                            <span class="valid-icon">✔</span>
+                            <span class="invalid-icon">✘</span>
+                            <span class="error-message"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required value="{{ form_data.email|default:'' }}"> 
+                        <div class="input-feedback" id="email-feedback">
+                            <span class="valid-icon">✔</span>
+                            <span class="invalid-icon">✘</span>
+                            <span class="error-message"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                        <div class="password-strength">
+                            <div class="strength-meter">
+                                <div class="strength-bar"></div>
+                                <div class="strength-bar"></div>
+                                <div class="strength-bar"></div>
+                            </div>
+                            <span class="strength-text">Password Strength: Weak</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm_password" required>
+                        <div class="input-feedback" id="confirm-password-feedback">
+                            <span class="valid-icon">✔</span>
+                            <span class="invalid-icon">✘</span>
+                            <span class="error-message"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Account Type</label>
+                        <select id="role" name="role">
+                            <option value="user" {% if form_data.role == 'user' %}selected{% endif %}>Regular User</option>
+                            <option value="admin" {% if form_data.role == 'admin' %}selected{% endif %}>Administrator</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn">Next</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-step {% if step == 2 %}active{% endif %}">
+                <form id="profile-form" method="post" action="{% url 'recipe_finder:signup_step2' %}">
+                    {% csrf_token %}
+                    <div class="form-group avatar-selection">
+                        <label>Choose Your Avatar</label>
+                        <div class="avatar-options">
+                            <label class="avatar-option">
+                                <input type="radio" name="avatar" value="https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg" {% if form_data.avatar == 'https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg' or not form_data.avatar %}checked{% endif %}>
+                                <img src="https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg" alt="Avatar 1">
+                            </label>
+                            <label class="avatar-option">
+                                <input type="radio" name="avatar" value="https://i.pinimg.com/736x/68/4c/b6/684cb636cf67568ed031a5fee627c8a5.jpg" {% if form_data.avatar == 'https://i.pinimg.com/736x/68/4c/b6/684cb636cf67568ed031a5fee627c8a5.jpg' %}checked{% endif %}>
+                                <img src="https://i.pinimg.com/736x/68/4c/b6/684cb636cf67568ed031a5fee627c8a5.jpg" alt="Avatar 2">
+                            </label>
+                            <label class="avatar-option">
+                                <input type="radio" name="avatar" value="https://i.pinimg.com/736x/1d/36/03/1d36037951e66042f1b379a84b07a6c3.jpg" {% if form_data.avatar == 'https://i.pinimg.com/736x/1d/36/03/1d36037951e66042f1b379a84b07a6c3.jpg' %}checked{% endif %}>
+                                <img src="https://i.pinimg.com/736x/1d/36/03/1d36037951e66042f1b379a84b07a6c3.jpg" alt="Avatar 3">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" value="{{ form_data.location|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">About You</label>
+                        <textarea id="bio" name="bio" rows="4">{{ form_data.bio|default:'' }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cuisines">Favorite Cuisines</label>
+                        <select id="cuisines" name="cuisines" multiple>
+                            {% for cuisine_option in cuisines_options %}
+                                <option value="{{ cuisine_option }}" {% if cuisine_option in form_data.cuisines_list %}selected{% endif %}>{{ cuisine_option }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="hint">Hold Ctrl/Cmd to select multiple</div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="window.history.back()">Back</button>
+                        <button type="submit" class="btn">Next</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-step {% if step == 3 %}active{% endif %}">
+                 {# Step 3 form is handled by server-side POST and redirects #}
+                <div class="review-section">
+                    <h3>Review Your Information</h3>
+                    <div class="review-item">
+                        <span>Username:</span>
+                        <span>{{ form_data.username }}</span>
+                    </div>
+                    <div class="review-item">
+                        <span>Email:</span>
+                        <span>{{ form_data.email }}</span>
+                    </div>
+                    <div class="review-item">
+                        <span>Account Type:</span>
+                        <span>{{ form_data.role|capfirst }}</span>
+                    </div>
+                    <div class="review-item">
+                        <span>Avatar:</span>
+                        <img src="{{ form_data.avatar }}" class="review-avatar">
+                    </div>
+                    <div class="review-item">
+                        <span>Location:</span>
+                        <span>{{ form_data.location|default:"Not provided" }}</span>
+                    </div>
+                    <div class="review-item">
+                        <span>About You:</span>
+                        <span>{{ form_data.bio|default:"Not provided" }}</span>
+                    </div>
+                    <div class="review-item">
+                        <span>Favorite Cuisines:</span>
+                        {# form_data.cuisines is a list in step 3 view #}
+                        <span>{{ form_data.cuisines|join:", "|default:"None selected" }}</span>
+                    </div>
+                </div>
+                <form id="complete-form" method="post" action="{% url 'recipe_finder:signup_step3' %}">
+                    {% csrf_token %}
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="window.history.back()">Back</button>
+                        <button type="submit" class="btn btn-submit">Complete Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="login-link">
+            Already have an account? <a href="{% url 'recipe_finder:login' %}">Log In</a>
+        </div>
+    </div>
+
+    {# Link signup.js here #}
+    <script src="{% static 'signup.js' %}"></script>
+</body>
+</html>

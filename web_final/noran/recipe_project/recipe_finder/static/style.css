@@ -1,0 +1,579 @@
+/* Reset default browser styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* Remove list style from ul */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* General body styling */
+body {
+    font-family: 'Comfortaa', sans-serif;
+    background-color: #F2E7DD;
+    color: #292421;
+}
+
+/* Admin dashboard main container */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F2E7DD;
+}
+
+/* Sidebar styling */
+.admin-sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #F2E7DD 0%, #D9B99F 100%);
+    padding: 30px 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo inside sidebar */
+.admin-sidebar .logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #A75F37;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Sidebar navigation styling */
+.admin-sidebar nav li {
+    margin-bottom: 15px;
+}
+
+.admin-sidebar nav a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: #292421;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+
+/* Icon inside sidebar links */
+.admin-sidebar nav a i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Active and hover states for sidebar links */
+.admin-sidebar nav a.active,
+.admin-sidebar nav a:hover {
+    background: #D9B99F;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateX(10px);
+}
+
+/* Logout section styling */
+.admin-sidebar .logout {
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.admin-sidebar .logout a {
+    display: flex;
+    align-items: center;
+    color: #A75F37;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Main content area */
+.admin-content {
+    flex: 1;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header inside content */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* Header title */
+.admin-header h1 {
+    color: #292421;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/* Search bar styling */
+.admin-header .search-bar {
+    display: flex;
+    width: 300px;
+}
+
+.admin-header .search-bar input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #D9B99F;
+    border-radius: 12px 0 0 12px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* Input focus style */
+.admin-header .search-bar input:focus {
+    border-color: #A75F37;
+}
+
+/* Search button styling */
+.admin-header .search-bar button {
+    padding: 0 15px;
+    background: #A75F37;
+    color: #fff;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.admin-header .search-bar button:hover {
+    background: #8e4a2a;
+}
+
+/* Stats cards section */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Individual stat card */
+.stats-section .stat-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+.stats-section .stat-card:hover {
+    transform: translateY(-10px);
+}
+
+/* Stat icon styling */
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: #F2E7DD;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: #A75F37;
+    font-size: 1.5rem;
+}
+
+/* Stat info styling */
+.stat-info h3 {
+    font-size: 1rem;
+    color: #5a5a5a;
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+.stat-info p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #292421;
+}
+
+/* Recipes section */
+.recipes-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Section header styling */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    color: #292421;
+    font-size: 1.3rem;
+}
+
+/* Add button styling */
+.add-btn {
+    background: #A75F37;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.add-btn:hover {
+    background: #8e4a2a;
+}
+
+.add-btn i {
+    margin-right: 5px;
+}
+
+/* Grid for recipe cards */
+.recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Recipe card styling */
+.recipe-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Recipe image styling */
+.recipe-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.recipe-card img:hover {
+    transform: scale(1.05);
+}
+
+/* Recipe information */
+.recipe-info {
+    padding: 15px;
+}
+
+.recipe-info h3 {
+    color: #292421;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+/* Description under recipe */
+.recipe-desc {
+    color: #5a5a5a;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* Meta data for recipe */
+.recipe-meta {
+    display: flex;
+    justify-content: space-between;
+    color: #5a5a5a;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+}
+
+.recipe-meta i {
+    margin-right: 5px;
+    color: #A75F37;
+}
+
+/* Edit and delete buttons */
+.recipe-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn, .delete-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+/* Edit button */
+.edit-btn {
+    background: #4ECDC4;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background: #3bb0b0;
+}
+
+/* Delete button */
+.delete-btn {
+    background: #FF6B6B;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background: #e95c5c;
+}
+
+/* Form for adding/editing recipes */
+.recipe-form {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #292421;
+}
+
+/* Form input, select, textarea styling */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #D9B99F;
+    border-radius: 12px;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+/* Focus effect for form fields */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #A75F37;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(167, 95, 55, 0.2);
+}
+
+/* Ingredients section */
+.ingredients-list {
+    margin-bottom: 10px;
+}
+
+.ingredient-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Input for ingredients */
+.ingredient-item input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #D9B99F;
+    border-radius: 8px;
+}
+
+/* Remove button for ingredients */
+.remove-btn {
+    width: 40px;
+    background: #FF6B6B;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.remove-btn:hover {
+    background: #e95c5c;
+}
+
+/* Add ingredient button */
+.add-ingredient {
+    background: #4ECDC4;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Comfortaa', sans-serif;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.add-ingredient:hover {
+    background: #3bb0b0;
+}
+
+.add-ingredient i {
+    margin-right: 5px;
+}
+
+/* Upload image button */
+.image-upload {
+    margin-top: 10px;
+}
+
+.image-upload input[type="file"] {
+    display: none;
+}
+
+.upload-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #A75F37;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.upload-btn:hover {
+    background: #8e4a2a;
+}
+
+.upload-btn i {
+    margin-right: 5px;
+}
+
+/* Form action buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* General button styles */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+/* Primary button */
+.btn-primary {
+    background: #A75F37;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background: #8e4a2a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Secondary button */
+.btn-secondary {
+    background: #fff;
+    color: #A75F37;
+    border: 2px solid #A75F37;
+}
+
+.btn-secondary:hover {
+    background: rgba(167, 95, 55, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Focus styles for interactive elements */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #A75F37;
+    outline-offset: 2px;
+}
+
+/* Responsive styles for tablets */
+@media (max-width: 992px) {
+    .admin-container {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .admin-content {
+        padding: 20px;
+    }
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .admin-header .search-bar {
+        width: 100%;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
