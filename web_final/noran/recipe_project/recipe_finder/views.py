@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -429,9 +430,14 @@ def admin_dashboard(request):
 
     search_query = request.GET.get('search', '').strip()
     if search_query:
-        recipes = Recipe.objects.filter(title__icontains=search_query)
-
-    recipes = Recipe.objects.all()
+        recipes = Recipe.objects.filter(
+            Q(name__icontains=search_query) |
+            Q(category__icontains=search_query) |
+            Q(ingredients__name__icontains=search_query)
+        ).distinct()
+    else:
+        recipes = Recipe.objects.all()
+        
     context = {
         'recipes': recipes,
         'search_query': search_query,
@@ -443,114 +449,99 @@ def edit_recipe(request, recipe_id=None):
     if not request.user.userprofile.is_admin:
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('recipe_finder:profile')
-
-    recipe = get_object_or_404(Recipe, id=recipe_id, user=request.user) if recipe_id else None
-
+        
+    recipe = None
+    if recipe_id:
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+    
     if request.method == 'POST':
+        # Get form data
         name = request.POST.get('recipe-name', '').strip()
         category = request.POST.get('recipe-category', '').strip()
         description = request.POST.get('recipe-desc', '').strip()
         time = request.POST.get('prep-time', '0')
         servings = request.POST.get('recipe-servings', '1')
+        instructions = request.POST.get('recipe-instructions', '').strip()
         ingredients_data = json.loads(request.POST.get('ingredients', '[]'))
+        
+        # Handle image upload - could be a file or a URL
         image = request.FILES.get('recipe-image')
-
-        # Basic validation
-        if not (name and category and time and ingredients_data):
-            messages.error(request, "Please fill in all required fields.")
-            return render(request, 'recipe_finder/edit-recipe.html', {
-                'recipe': recipe,
-                'error': True
-            })
-
+        image_url = request.POST.get('recipe-image-url', '')
+        
+        # Validate required fields
+        if not (name and category):
+            return JsonResponse({
+                'success': False, 
+                'message': "Recipe name and category are required."
+            }, status=400)
+        
         try:
             time = int(time)
             servings = int(servings)
             if time <= 0 or servings <= 0:
                 raise ValueError
         except ValueError:
-            messages.error(request, "Please enter valid numbers for time and servings.")
-            return render(request, 'recipe_finder/edit-recipe.html', {
-                'recipe': recipe,
-                'error': True
-            })
-
-        # Create or update recipe
+            return JsonResponse({
+                'success': False, 
+                'message': "Please enter valid numbers for time and servings."
+            }, status=400)
+        
+        # Create new recipe or update existing one
         if recipe is None:
             recipe = Recipe(user=request.user)
-
+        
         recipe.name = name
         recipe.category = category
         recipe.description = description
         recipe.time = time
         recipe.servings = servings
+        recipe.instructions = instructions
+        
+        # Handle image upload if provided
         if image:
+            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+            ext = os.path.splitext(image.name)[1].lower()
+            if ext not in valid_extensions:
+                return JsonResponse({
+                    'success': False, 
+                    'message': "Invalid image format. Please upload JPG, JPEG, PNG, or GIF."
+                }, status=400)
             recipe.image = image
+        elif image_url and not recipe.image:
+            # Only set image_url if no file was uploaded and no existing image
+            recipe.image_url = image_url
+        
         recipe.save()
-
-        # Clear old ingredients and add new ones
-        recipe.ingredients.all().delete()
+        
+        # Clear existing ingredients first
+        Ingredient.objects.filter(recipe=recipe).delete()
+        
+        # Add new ingredients
         for ing in ingredients_data:
             ing_name = ing.get('name', '').strip()
             ing_quantity = ing.get('quantity', '').strip()
             if ing_name:
-                Ingredient.objects.create(recipe=recipe, name=ing_name, quantity=ing_quantity)
-
-        messages.success(request, "Recipe saved successfully!")
+                Ingredient.objects.create(
+                    recipe=recipe, 
+                    name=ing_name, 
+                    quantity=ing_quantity
+                )
+        
+        # Return success response
         return JsonResponse({
             'success': True,
             'message': 'Recipe saved successfully!',
+            'image_url': recipe.image.url if recipe.image else recipe.image_url if hasattr(recipe, 'image_url') else '',
             'redirect_url': reverse('recipe_finder:admin_dashboard')
         })
-
-    # GET request
+    
+    # Load existing ingredients for the recipe
+    ingredients = []
+    if recipe:
+        ingredients = [{'name': ing.name, 'quantity': ing.quantity} for ing in recipe.ingredients.all()]
+    
+    # Render the edit form
     return render(request, 'edit-recipe.html', {
-        'recipe': recipe
-    }) 
-
-def home(request):
-    return render(request, 'home.html')
-
-#@login_required
-# recipes/views.py
-def dashboard(request):
-    recipes = Recipe.objects.all()
-    return render(request, 'dashboard.html', {'recipes': recipes}) 
-#@login_required
-# recipes/views.py
-
-def search_view(request):
-    query = request.GET.get('q', '')
-    
-    # Search in title, description OR ingredients
-    if query:
-        recipes = Recipe.objects.filter(
-             Q(title__icontains=query) |
-             Q(description__icontains=query) |
-             Q(ingredients__icontains=query)
-        )
-    else:
-        recipes = Recipe.objects.all()
-    
-    context = {
-        'recipes': recipes,
-        'query': query,
-        'result_count': recipes.count(),
-    }
-    return render(request, 'search_user.html', context)
-#@login_required
-def recipe_detail(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk)
-    return render(request, 'recipe_detail.html', {'recipe': recipe})
-
-def favorites_view(request):
-    return render(request, 'favouriteRecipe.html')
-
-def recipe_detail(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    context = {
         'recipe': recipe,
-        'ingredients_list': recipe.ingredients.split('\n'),  # Split by new lines
-        'instructions_list': recipe.instructions.split('\n') if recipe.instructions else []
-    }
-    return render(request, 'recipe_detail.html', context)
+        'ingredients': json.dumps(ingredients)  # Pass as JSON string for JavaScript
+    })
